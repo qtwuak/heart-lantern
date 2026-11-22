@@ -136,7 +136,7 @@
 
   <!-- SKY JOURNAL -->
   <section class="view" data-view="sky" id="v-sky" hidden>
-    <div class="head"><p class="eyebrow">Your sky journal</p><h1 tabindex="-1">Your constellation</h1><p class="lede">Every check-in lights one star. Stars rise and fall with your mood, and over weeks they draw your own shape. It shows patterns to notice, not a diagnosis.</p></div>
+    <div class="head"><p class="eyebrow">Your sky journal</p><h1 tabindex="-1">Your constellation</h1></div>
     <div class="banner" id="demoNote" hidden></div>
     <div class="stats" id="stats"></div>
     <div class="card"><h2>The last few weeks</h2><div class="legend"><span><i class="star"></i>Mood (5 = sunny)</span><span><i class="wind"></i>Wind, your stress (5 = gale)</span></div><div class="chart" id="chart"></div></div>
@@ -149,8 +149,8 @@
 
   <!-- LANTERNS -->
   <section class="view" data-view="lanterns" id="v-lanterns" hidden>
-    <div class="head"><p class="eyebrow">Anonymous · 匿名</p><h1 tabindex="-1">The lantern sky</h1><p class="lede">Write what is on your chest and release it as a lantern. Read what other students carry. Tap a lantern to open it and light it up with a hug.</p></div>
-    <div class="banner" id="wallBanner">Prototype note: in this version lanterns are stored in your own browser, with example lanterns from other students. A shared database is the next milestone.</div>
+    <div class="head"><p class="eyebrow">Anonymous · 匿名</p><h1 tabindex="-1">The lantern sky</h1></div>
+    
     <form class="card" id="composer" autocomplete="off">
       <div class="block field"><label for="wallText"><span>What would you like to release?</span><span class="count" id="wallCount">0/400</span></label>
         <textarea id="wallText" maxlength="400" rows="4" placeholder="A rough week, a small win, a question you are scared to ask. No names, no student IDs."></textarea></div>
@@ -165,24 +165,24 @@
 
   <!-- EXAMS -->
   <section class="view" data-view="exams" id="v-exams" hidden>
-    <div class="head"><p class="eyebrow">Exam quest</p><h1 tabindex="-1">Get through exam week</h1><p class="lede">Small quests, a focus timer and calming tools. Earn lantern fuel for every kind thing you do for yourself, and level up your firefly.</p></div>
+    <div class="head"><p class="eyebrow">Exam quest</p><h1 tabindex="-1">Get through exam week</h1><p class="lede">Small quests, focus timer, and calming tools to pace your prep.</p></div>
     <div class="panic"><p><b>Heart racing or mind blank?</b> Do a one-minute reset: three slow rounds of box breathing, then a grounding step.</p><button class="btn btn-primary" id="panicBtn" type="button">Start the 1-minute reset</button></div>
     <div class="grid2">
       <div class="card" id="questCard"><h2>Today's quests</h2><div id="questBody"></div></div>
-      <div class="card" id="examCard"><h2>My exams</h2><p class="sub">Add your own dates. They stay on this device.</p>
+      <div class="card" id="examCard"><h2>My exams</h2>
         <div id="examList"></div>
         <form class="exam-form" id="examForm" autocomplete="off">
           <div class="field"><label for="examName">Course or exam</label><input type="text" id="examName" maxlength="60" placeholder="e.g. Calculus midterm"></div>
           <div class="field"><label for="examAt">Date and time</label><input type="datetime-local" id="examAt"></div>
           <button class="btn btn-primary" type="submit">Add exam</button></form>
         <p class="fine" id="examMsg" role="status"></p></div>
-      <div class="card"><h2>Focus timer</h2><p class="sub">25 minutes on, 5 off. One topic per round.</p>
+      <div class="card"><h2>Focus timer</h2>
         <div class="timer" id="tDisplay" role="timer" aria-live="off">25:00</div>
         <div class="row center"><button class="btn btn-primary" id="tStart" type="button">Start</button><button class="btn" id="tReset" type="button">Reset</button></div>
         <p class="fine center-text" id="tInfo"></p></div>
-      <div class="card"><h2>Ground yourself</h2><p class="sub">5-4-3-2-1. Tap each step when done.</p>
+      <div class="card"><h2>Ground yourself</h2><p class="sub">5-4-3-2-1 sensory grounding.</p>
         <ul class="steps" id="ground"></ul><div class="row"><button class="btn btn-sm btn-ghost" id="groundReset" type="button">Reset</button></div></div>
-      <div class="card"><h2>Exam-day checklist</h2><p class="sub">Saved on this device.</p>
+      <div class="card"><h2>Exam-day checklist</h2>
         <ul class="steps" id="checklist"></ul><div class="row"><button class="btn btn-sm btn-ghost" id="checkReset" type="button">Reset</button></div></div>
       <div class="card"><h2>Study without burning out</h2>
         <ul class="tips"><li><b>Quiz yourself</b> instead of rereading. Pulling answers out of memory sticks better.</li><li><b>Spread it out.</b> Several short sessions across days beat one long night.</li><li><b>Protect last night's sleep.</b> A rested brain recalls more than two extra hours of cramming.</li><li><b>Start with ten minutes</b> on the scariest topic.</li></ul>
@@ -192,7 +192,7 @@
 
   <!-- ZE -->
   <section class="view" data-view="ze" id="v-ze" hidden>
-    <div class="head"><p class="eyebrow">AI companion</p><h1 tabindex="-1">Talk to Ze</h1><p class="lede">Ze is a gentle companion, not a therapist. Good for untangling a hard day, trying a calming exercise or planning one small next step. Chinese or English is fine.</p></div>
+    <div class="head"><p class="eyebrow">AI companion</p><h1 tabindex="-1">Talk to Ze</h1></div>
     <div class="banner" id="zeMode"></div>
     <div class="card chatbox">
       <div class="log" id="log" aria-live="polite"></div>
@@ -206,7 +206,7 @@
       <div class="row spread"><label class="check"><input type="checkbox" id="shareCheckin"> Share today's check-in with Ze</label><button class="btn btn-sm btn-ghost" id="newChat" type="button">New conversation</button></div>
     </div>
     <details class="card settings" id="aiSettings"><summary>Connect a real AI (optional)</summary>
-      <p class="sub">Without a key, Ze uses pre-written replies so the site works anywhere. Add your own key to let Ze talk through ChatGPT or Grok. The key stays in this browser only. Use a key with a low spending limit and never on a shared computer.</p>
+      <p class="sub">Add your own OpenAI or xAI key for live AI replies.</p>
       <div class="settings-grid">
         <div class="field"><label for="aiProvider">Provider</label><select id="aiProvider"><option value="demo">Demo replies (no key)</option><option value="openai">OpenAI (ChatGPT)</option><option value="xai">xAI (Grok)</option><option value="custom">Other OpenAI-compatible</option></select></div>
         <div class="field"><label for="aiModel">Model</label><input type="text" id="aiModel" placeholder="e.g. gpt-4o-mini"></div>
@@ -215,12 +215,12 @@
       </div>
       <div class="row"><button class="btn btn-sm btn-primary" id="aiSave" type="button">Save</button><button class="btn btn-sm btn-ghost" id="aiClear" type="button">Remove key</button><span class="fine" id="aiMsg" role="status"></span></div>
     </details>
-    <p class="fine">Messages are not stored. Please do not share names or student ID numbers.</p>
+    
   </section>
 
   <!-- LIBRARY -->
   <section class="view" data-view="library" id="v-library" hidden>
-    <div class="head"><p class="eyebrow">Library</p><h1 tabindex="-1">Quick guides</h1><p class="lede">Short, kind how-tos for the things students get stuck on. Pick one and tick off the steps.</p></div>
+    <div class="head"><p class="eyebrow">Library</p><h1 tabindex="-1">Quick guides</h1></div>
     <div class="card crisis-card"><h2>Reach a person now</h2><p class="sub">If you might hurt yourself, or someone is hurting you, call. These are free in Taiwan.</p><ul class="lines" id="hotlines"></ul>
       <div class="row"><a class="btn btn-sm" href="https://www.yzu.edu.tw/admin/st/" target="_blank" rel="noopener">YZU Student Affairs (諮就組)</a></div></div>
     <div class="row filters-row"><div class="field grow"><label class="sr" for="libSearch">Search guides</label><input type="text" id="libSearch" placeholder="Search: sleep, exam, group, lonely…"></div></div>
@@ -230,8 +230,8 @@
 
   <!-- PULSE -->
   <section class="view" data-view="pulse" id="v-pulse" hidden>
-    <div class="head"><p class="eyebrow">For counsellors and student affairs</p><h1 tabindex="-1">Campus pulse</h1><p class="lede">How a campus could see stress rise before exam weeks, without ever seeing a single student. This page uses sample numbers to show the idea.</p></div>
-    <div class="banner">Sample data for demonstration. In a real deployment it would use only opt-in, anonymous check-ins, and any group with fewer than 10 students is hidden.</div>
+    <div class="head"><p class="eyebrow">For counsellors and student affairs</p><h1 tabindex="-1">Campus pulse</h1></div>
+    
     <div class="stats" id="pulseStats"></div>
     <div class="card"><h2>Mood and stress by week</h2><div class="legend"><span><i class="star"></i>Average mood</span><span><i class="wind"></i>Average stress</span><span><i class="band"></i>Exam weeks</span></div><div class="chart" id="pulseChart"></div></div>
     <div class="grid2">
@@ -243,7 +243,7 @@
 
   <!-- ABOUT -->
   <section class="view" data-view="about" id="v-about" hidden>
-    <div class="head"><p class="eyebrow">About the project</p><h1 tabindex="-1">Why Heart Lantern</h1><p class="lede">Many students struggle quietly, especially around exams. Heart Lantern is a calm, anonymous place to check in with yourself, feel less alone and find a next step.</p></div>
+    <div class="head"><p class="eyebrow">About the project</p><h1 tabindex="-1">Why Heart Lantern</h1></div>
     <div class="sdgs" id="sdgs"></div>
     <div class="card"><h2>Prototype progress</h2><p class="sub" id="progLine"></p><div class="mods" id="mods"></div></div>
     <div class="card"><h2>Page plan</h2><p class="sub">The eight pages and what sits on each.</p><div class="plan" id="plan"></div></div>

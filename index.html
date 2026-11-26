@@ -47,6 +47,7 @@
       <div class="lh-in">
         <p class="eyebrow lh-a">Heart Lantern · 心燈</p>
         <h1 class="lh-title lh-b" tabindex="-1">Say it<br>to the sky.</h1>
+        <p class="lh-lede lh-c">A quiet place for YZU students to check in, let go, and get through exam week.</p>
         <div class="row center lh-d"><a class="btn btn-primary btn-lg" href="#today">Begin</a><button class="btn btn-lg btn-ghost" id="seeHow" type="button">See how it works</button></div>
       </div>
       <div class="hero-moon" id="heroMoon" role="img" aria-label="The moon tonight"></div>
@@ -93,6 +94,7 @@
 
     <div class="cta">
       <h2 class="big">Ready when you are.</h2>
+      <p class="lede center-lede">It takes one minute. Your sky is waiting.</p>
       <div class="row center"><a class="btn btn-primary btn-lg" href="#today">Light today's star</a><a class="btn btn-lg btn-ghost" href="#library">I need to talk to someone</a></div>
     </div>
   </section>
@@ -104,16 +106,18 @@
       <div class="hero-text">
         <p class="eyebrow" id="dateLine"></p>
         <h1 id="hello" tabindex="-1">Hi.</h1>
-        </div>
+        <p class="lede" id="moonLine"></p>
+      </div>
     </div>
     <div class="grid-today">
       <form class="card" id="checkin" autocomplete="off">
         <h2>What is your inner weather?</h2>
+        <p class="sub">One minute. Your sky shifts to match how today feels, and a new star lights up in your journal.</p>
         <fieldset class="block"><legend>Today feels</legend><div class="weather" id="weather"></div></fieldset>
-        <fieldset class="block"><legend>Wind </legend><div class="seg" id="stress"></div></fieldset>
+        <fieldset class="block"><legend>Wind <span class="hint">(how stressed)</span></legend><div class="seg" id="stress"></div></fieldset>
         <div class="block field"><label for="sleep"><span>Sleep last night</span><output id="sleepOut" for="sleep">7 h</output></label><input type="range" id="sleep" min="0" max="12" step="0.5" value="7"></div>
-        <fieldset class="block"><legend>On your mind </legend><div class="chips" id="tags"></div></fieldset>
-        <div class="block field"><label for="note"><span>Private note</span><span class="count" id="noteCount">0/400</span></label><textarea id="note" maxlength="400" rows="3" placeholder="Private note..."></textarea></div>
+        <fieldset class="block"><legend>On your mind <span class="hint">(pick any)</span></legend><div class="chips" id="tags"></div></fieldset>
+        <div class="block field"><label for="note"><span>Private note</span><span class="count" id="noteCount">0/400</span></label><textarea id="note" maxlength="400" rows="3" placeholder="Only you can read this. It stays on this device."></textarea></div>
         <div class="row"><button class="btn btn-primary" type="submit" id="saveBtn">Light today's star</button><span id="saveMsg" class="fine" role="status"></span></div>
       </form>
       <div class="col">
@@ -133,13 +137,14 @@
   <!-- SKY JOURNAL -->
   <section class="view" data-view="sky" id="v-sky" hidden>
     <div class="head"><p class="eyebrow">Your sky journal</p><h1 tabindex="-1">Your constellation</h1></div>
+    <div class="banner" id="demoNote" hidden></div>
     <div class="stats" id="stats"></div>
     <div class="card"><h2>The last few weeks</h2><div class="legend"><span><i class="star"></i>Mood (5 = sunny)</span><span><i class="wind"></i>Wind, your stress (5 = gale)</span></div><div class="chart" id="chart"></div></div>
     <div class="grid2">
-      <div class="card"><h3>Five-week sky</h3><div class="cal" id="cal"></div><div class="swatches" id="swatches"></div></div>
+      <div class="card"><h3>Five-week sky</h3><p class="sub">Each circle is a day. Colour shows mood from stormy to sunny.</p><div class="cal" id="cal"></div><div class="swatches" id="swatches"></div></div>
       <div class="card"><h3>What stands out</h3><div id="insights" class="insights"></div><div class="bars" id="tagBars"></div></div>
     </div>
-    <div class="card row-card"><div><h3>Your data</h3></div><div class="row"><button class="btn btn-sm" id="exportBtn" type="button">Download my data</button><button class="btn btn-sm btn-ghost" id="wipeBtn" type="button">Erase my data</button></div></div>
+    <div class="card row-card"><div><h3>Your data</h3><p class="sub">Everything lives in this browser. Nothing is uploaded.</p></div><div class="row"><button class="btn btn-sm" id="exportBtn" type="button">Download my data</button><button class="btn btn-sm btn-ghost" id="wipeBtn" type="button">Erase my data</button></div></div>
   </section>
 
   <!-- LANTERNS -->
@@ -148,20 +153,20 @@
     
     <form class="card" id="composer" autocomplete="off">
       <div class="block field"><label for="wallText"><span>What would you like to release?</span><span class="count" id="wallCount">0/400</span></label>
-        <textarea id="wallText" maxlength="400" rows="4" placeholder="Write what is on your mind (no names or student IDs)..."></textarea></div>
+        <textarea id="wallText" maxlength="400" rows="4" placeholder="A rough week, a small win, a question you are scared to ask. No names, no student IDs."></textarea></div>
       <fieldset class="block"><legend>Colour it</legend><div class="chips" id="wallTags"></div></fieldset>
       <div class="row"><button class="btn btn-primary" id="postBtn" type="submit">Release lantern</button><span class="fine" id="wallMsg" role="status"></span></div>
       <div id="wallCrisis" hidden></div>
     </form>
+    <details class="guide"><summary>House rules</summary><ul><li>Be kind. No bullying, no naming people, no private details about anyone.</li><li>No student IDs, phone numbers or anything that points to a person.</li><li>Lanterns get a random nickname. There are no accounts or names.</li><li>If you are in danger, use the numbers in the Library, not the wall.</li></ul></details>
     <div class="chips filters" id="wallFilters" aria-label="Filter lanterns"></div>
     <div class="sea" id="sea" aria-live="polite"></div>
   </section>
 
   <!-- EXAMS -->
   <section class="view" data-view="exams" id="v-exams" hidden>
-    <div class="head"><p class="eyebrow">Exam quest</p><h1 tabindex="-1">Get through exam week</h1></div>
-    <div class="panic"><p><b>Heart racing or mind blank?</b></p><button class="btn btn-primary" id="panicBtn" type="button">1-minute reset</button></div>
-    
+    <div class="head"><p class="eyebrow">Exam quest</p><h1 tabindex="-1">Get through exam week</h1><p class="lede">Small quests, focus timer, and calming tools to pace your prep.</p></div>
+    <div class="panic"><p><b>Heart racing or mind blank?</b> Do a one-minute reset: three slow rounds of box breathing, then a grounding step.</p><button class="btn btn-primary" id="panicBtn" type="button">Start the 1-minute reset</button></div>
     <div class="grid2">
       <div class="card" id="questCard"><h2>Today's quests</h2><div id="questBody"></div></div>
       <div class="card" id="examCard"><h2>My exams</h2>
@@ -175,28 +180,33 @@
         <div class="timer" id="tDisplay" role="timer" aria-live="off">25:00</div>
         <div class="row center"><button class="btn btn-primary" id="tStart" type="button">Start</button><button class="btn" id="tReset" type="button">Reset</button></div>
         <p class="fine center-text" id="tInfo"></p></div>
-      <div class="card"><h2>Ground yourself</h2><ul class="steps" id="ground"></ul><div class="row"><button class="btn btn-sm btn-ghost" id="groundReset" type="button">Reset</button></div></div>
+      <div class="card"><h2>Ground yourself</h2><p class="sub">5-4-3-2-1 sensory grounding.</p>
+        <ul class="steps" id="ground"></ul><div class="row"><button class="btn btn-sm btn-ghost" id="groundReset" type="button">Reset</button></div></div>
       <div class="card"><h2>Exam-day checklist</h2>
         <ul class="steps" id="checklist"></ul><div class="row"><button class="btn btn-sm btn-ghost" id="checkReset" type="button">Reset</button></div></div>
-      </div>
+      <div class="card"><h2>Study without burning out</h2>
+        <ul class="tips"><li><b>Quiz yourself</b> instead of rereading. Pulling answers out of memory sticks better.</li><li><b>Spread it out.</b> Several short sessions across days beat one long night.</li><li><b>Protect last night's sleep.</b> A rested brain recalls more than two extra hours of cramming.</li><li><b>Start with ten minutes</b> on the scariest topic.</li></ul>
+        <div class="row"><button class="btn" id="examLantern" type="button">Release exam stress as a lantern</button></div></div>
     </div>
   </section>
 
   <!-- ZE -->
   <section class="view" data-view="ze" id="v-ze" hidden>
     <div class="head"><p class="eyebrow">AI companion</p><h1 tabindex="-1">Talk to Ze</h1></div>
+    <div class="banner" id="zeMode"></div>
     <div class="card chatbox">
       <div class="log" id="log" aria-live="polite"></div>
       <div class="chips" id="starters"></div>
       <div id="chatCrisis" hidden></div>
       <form class="chat-form" id="chatForm" autocomplete="off">
         <label class="sr" for="chatInput">Message to Ze</label>
-        <textarea id="chatInput" rows="2" maxlength="1200" placeholder="Message Ze..."></textarea>
+        <textarea id="chatInput" rows="2" maxlength="1200" placeholder="Type here. Enter sends, Shift+Enter adds a line."></textarea>
         <button class="btn btn-primary" id="sendBtn" type="submit">Send</button>
       </form>
       <div class="row spread"><label class="check"><input type="checkbox" id="shareCheckin"> Share today's check-in with Ze</label><button class="btn btn-sm btn-ghost" id="newChat" type="button">New conversation</button></div>
     </div>
     <details class="card settings" id="aiSettings"><summary>Connect a real AI (optional)</summary>
+      <p class="sub">Add your own OpenAI or xAI key for live AI replies.</p>
       <div class="settings-grid">
         <div class="field"><label for="aiProvider">Provider</label><select id="aiProvider"><option value="demo">Demo replies (no key)</option><option value="openai">OpenAI (ChatGPT)</option><option value="xai">xAI (Grok)</option><option value="custom">Other OpenAI-compatible</option></select></div>
         <div class="field"><label for="aiModel">Model</label><input type="text" id="aiModel" placeholder="e.g. gpt-4o-mini"></div>
@@ -211,7 +221,7 @@
   <!-- LIBRARY -->
   <section class="view" data-view="library" id="v-library" hidden>
     <div class="head"><p class="eyebrow">Library</p><h1 tabindex="-1">Quick guides</h1></div>
-    <div class="card crisis-card"><h2>Reach a person now</h2><ul class="lines" id="hotlines"></ul>
+    <div class="card crisis-card"><h2>Reach a person now</h2><p class="sub">If you might hurt yourself, or someone is hurting you, call. These are free in Taiwan.</p><ul class="lines" id="hotlines"></ul>
       <div class="row"><a class="btn btn-sm" href="https://www.yzu.edu.tw/admin/st/" target="_blank" rel="noopener">YZU Student Affairs (諮就組)</a></div></div>
     <div class="row filters-row"><div class="field grow"><label class="sr" for="libSearch">Search guides</label><input type="text" id="libSearch" placeholder="Search: sleep, exam, group, lonely…"></div></div>
     <div class="chips" id="libTopics"></div>
@@ -225,8 +235,8 @@
     <div class="stats" id="pulseStats"></div>
     <div class="card"><h2>Mood and stress by week</h2><div class="legend"><span><i class="star"></i>Average mood</span><span><i class="wind"></i>Average stress</span><span><i class="band"></i>Exam weeks</span></div><div class="chart" id="pulseChart"></div></div>
     <div class="grid2">
-      <div class="card"><h3>What students say weighs on them</h3><div class="bars" id="pulseBars"></div></div>
-      <div class="card"><h3>By college</h3><div class="tablewrap"><table id="pulseTable"></table></div></div>
+      <div class="card"><h3>What students say weighs on them</h3><p class="sub">Share of check-ins that mention each topic.</p><div class="bars" id="pulseBars"></div></div>
+      <div class="card"><h3>By college</h3><p class="sub">Small groups are hidden to protect privacy.</p><div class="tablewrap"><table id="pulseTable"></table></div></div>
     </div>
     <div class="card"><h3>What a counsellor could do with this</h3><ul class="tips" id="pulseActs"></ul></div>
   </section>
@@ -236,13 +246,17 @@
     <div class="head"><p class="eyebrow">About the project</p><h1 tabindex="-1">Why Heart Lantern</h1></div>
     <div class="sdgs" id="sdgs"></div>
     <div class="card"><h2>Prototype progress</h2><p class="sub" id="progLine"></p><div class="mods" id="mods"></div></div>
-    <div class="card"><h2>Page plan</h2><div class="plan" id="plan"></div></div>
+    <div class="card"><h2>Page plan</h2><p class="sub">The eight pages and what sits on each.</p><div class="plan" id="plan"></div></div>
     <div class="grid2">
       <div class="card"><h3>Next milestones</h3><ol class="roadmap" id="roadmap"></ol></div>
       <div class="card"><h3>Safety and privacy by design</h3><ul class="tips" id="safety"></ul></div>
     </div>
   </section>
 </main>
+
+<footer class="foot wrap">
+  <p>Heart Lantern is a student project, not a medical or crisis service. If you are in danger, call <a href="tel:119">119</a> or <a href="tel:110">110</a>. Free support: <a href="tel:1925">1925</a> (24 hours) · <a href="tel:1995">1995</a> (24 hours) · <a href="tel:1980">1980</a>.</p>
+</footer>
 
 <dialog id="lanternDlg" aria-labelledby="ldTitle"><div class="dlg" id="lanternBody"></div></dialog>
 <dialog id="guideDlg" aria-labelledby="gdTitle"><div class="dlg" id="guideBody"></div></dialog>

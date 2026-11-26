@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en" data-sky="night">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heart Lantern 心燈</title>
+<meta name="description" content="Heart Lantern is a calm night-sky wellbeing space for YZU students: mood check-ins, an anonymous lantern wall, exam-week tools and a gentle AI companion.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<a class="skip" href="#main">Skip to content</a>
+<div id="scrollbar" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#home" aria-label="Heart Lantern home">
+      <svg viewBox="0 0 40 48" aria-hidden="true"><path d="M20 2v5" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/><rect x="12" y="6" width="16" height="5" rx="2.5" fill="var(--cap)"/><path d="M10 14c0-3 5-4 10-4s10 1 10 4v14c0 3-5 5-10 5s-10-2-10-5z" fill="url(#lg)"/><path d="M15 12v21M20 11.5v22M25 12v21" stroke="rgba(120,40,40,.28)" stroke-width="1.2"/><rect x="12" y="32" width="16" height="5" rx="2.5" fill="var(--cap)"/><path d="M20 37v6M17 37l-1 5M23 37l1 5" stroke="var(--rose)" stroke-width="1.8" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#FFE29A"/><stop offset="1" stop-color="#FF8F70"/></linearGradient></defs></svg>
+      <span><b>Heart Lantern</b><small>心燈 · for YZU students</small></span>
+    </a>
+    <div class="bar-actions">
+      <a class="exam-chip" id="examChip" href="#exams" hidden></a>
+      <button class="icon-btn" id="breatheBtn" type="button">Breathe</button>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch between night and dawn" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span id="themeLabel">Dawn</span></button>
+    </div>
+  </div>
+  <nav class="tabs wrap" aria-label="Sections">
+    <a href="#today" data-nav="today">Today</a>
+    <a href="#sky" data-nav="sky">Sky journal</a>
+    <a href="#lanterns" data-nav="lanterns">Lanterns</a>
+    <a href="#exams" data-nav="exams">Exam quest</a>
+    <a href="#ze" data-nav="ze">Talk to Ze</a>
+    <a href="#library" data-nav="library">Library</a>
+    <a href="#pulse" data-nav="pulse">Campus pulse</a>
+    <a href="#about" data-nav="about">About</a>
+  </nav>
+</header>
+
+<main class="wrap" id="main">
+
+  <!-- HOME: scroll story -->
+  <section class="view" data-view="home" id="v-home">
+    <div class="land-hero" id="hero">
+      <div class="lh-in">
+        <p class="eyebrow lh-a">Heart Lantern · 心燈</p>
+        <h1 class="lh-title lh-b" tabindex="-1">Say it<br>to the sky.</h1>
+        <p class="lh-lede lh-c">A quiet place for YZU students to check in, let go, and get through exam week.</p>
+        <div class="row center lh-d"><a class="btn btn-primary btn-lg" href="#today">Begin</a><button class="btn btn-lg btn-ghost" id="seeHow" type="button">See how it works</button></div>
+      </div>
+      <div class="hero-moon" id="heroMoon" role="img" aria-label="The moon tonight"></div>
+      <div class="cue" aria-hidden="true"><span>Scroll</span><i></i></div>
+    </div>
+
+    <div class="story" id="story" aria-label="How Heart Lantern works">
+      <div class="story-pin">
+        <div class="story-text">
+          <div class="chap"><p class="eyebrow">01 · Check in</p><h2>Check in with your inner weather.</h2><p>One minute. Pick how today feels, how windy it is inside, how you slept. The sky behind you changes to match, and a new star lights up in your journal.</p></div>
+          <div class="chap"><p class="eyebrow">02 · Let go</p><h2>Let it go as a lantern.</h2><p>Write what is on your chest and release it, with no name attached. Other students read it, light it with a hug, and remember they are not the only one.</p></div>
+          <div class="chap"><p class="eyebrow">03 · Get through</p><h2>Get through exam week.</h2><p>Countdowns, tiny daily quests, a focus timer, and a breathing orb for the moment your mind goes blank. Small steps, kindly counted.</p></div>
+        </div>
+        <div class="story-vis">
+          <div class="vis v1"><div class="orbcard" id="orbcard"></div><p class="vlabel" id="vlabel">Stormy</p></div>
+          <div class="vis v2"><div class="lsky" id="lsky"></div></div>
+          <div class="vis v3"><div class="ringbox"><svg viewBox="0 0 220 220" aria-hidden="true"><circle cx="110" cy="110" r="96" fill="none" stroke="var(--edge)" stroke-width="6"/><circle id="ringProg" cx="110" cy="110" r="96" fill="none" stroke="var(--gold)" stroke-width="6" stroke-linecap="round" transform="rotate(-90 110 110)" stroke-dasharray="603.2" stroke-dashoffset="603.2"/></svg><div class="orb2" id="orb2"></div><p class="rlabel" id="rlabel">Breathe in</p></div></div>
+        </div>
+        <div class="story-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+
+    <div class="rail" id="rail">
+      <h2 class="big">Everything in one calm place.</h2>
+      <div class="rail-track">
+        <a class="rcard" style="--g:linear-gradient(150deg,#4B3FA8,#8E6BE0)" href="#sky"><p class="eyebrow">Sky journal</p><h3>Your mood, drawn as stars.</h3><p>Every check-in lights a star. Over weeks they draw your own constellation.</p><span class="go">Open →</span></a>
+        <a class="rcard" style="--g:linear-gradient(150deg,#B93A63,#E0654F)" href="#lanterns"><p class="eyebrow">Lantern wall</p><h3>Anonymous, and never alone.</h3><p>Release a lantern, read others, send a hug. No names, ever.</p><span class="go">Open →</span></a>
+        <a class="rcard" style="--g:linear-gradient(150deg,#1F7F6B,#2F6FB3)" href="#exams"><p class="eyebrow">Exam quest</p><h3>Small wins, big week.</h3><p>Quests, countdowns, a focus timer and a one-minute panic reset.</p><span class="go">Open →</span></a>
+        <a class="rcard" style="--g:linear-gradient(150deg,#5B3FB5,#9A5BD6)" href="#ze"><p class="eyebrow">Talk to Ze</p><h3>A gentle voice at 2 a.m.</h3><p>A caring AI companion that knows when to point you to a person.</p><span class="go">Open →</span></a>
+        <a class="rcard" style="--g:linear-gradient(150deg,#9A5A0A,#C47A12)" href="#library"><p class="eyebrow">Library</p><h3>Short guides, real steps.</h3><p>Sleep, blanking out, group conflicts. Tick each step as you go.</p><span class="go">Open →</span></a>
+        <a class="rcard" style="--g:linear-gradient(150deg,#2C4A9A,#3B7BC4)" href="#pulse"><p class="eyebrow">Campus pulse</p><h3>See stress before it peaks.</h3><p>Anonymous, opt-in trends for counsellors. Small groups stay hidden.</p><span class="go">Open →</span></a>
+      </div>
+    </div>
+
+    <div class="values">
+      <h2 class="big center-text">Made to be safe, not just pretty.</h2>
+      <div class="vgrid">
+        <div class="vitem"><b><span class="count" data-to="0">0</span></b><p>names or student IDs ever asked for</p></div>
+        <div class="vitem"><b><span class="count" data-to="10">0</span></b><p>students needed before a campus number is shown</p></div>
+        <div class="vitem"><b><span class="count" data-to="24">0</span><small>h</small></b><p>free hotlines, always one tap away</p></div>
+      </div>
+      <div class="sdgrow" id="sdgrow"></div>
+    </div>
+
+    <div class="cta">
+      <h2 class="big">Ready when you are.</h2>
+      <p class="lede center-lede">It takes one minute. Your sky is waiting.</p>
+      <div class="row center"><a class="btn btn-primary btn-lg" href="#today">Light today's star</a><a class="btn btn-lg btn-ghost" href="#library">I need to talk to someone</a></div>
+    </div>
+  </section>
+
+  <!-- TODAY -->
+  <section class="view" data-view="today" id="v-today" hidden>
+    <div class="hero">
+      <div class="moon" id="moon" role="img" aria-label="Moon phase tonight"></div>
+      <div class="hero-text">
+        <p class="eyebrow" id="dateLine"></p>
+        <h1 id="hello" tabindex="-1">Hi.</h1>
+        
+      </div>
+    </div>
+    <div class="grid-today">
+      <form class="card" id="checkin" autocomplete="off">
+        <h2>What is your inner weather?</h2>
+        
+        <fieldset class="block"><legend>Today feels</legend><div class="weather" id="weather"></div></fieldset>
+        <fieldset class="block"><legend>Wind </legend><div class="seg" id="stress"></div></fieldset>
+        <div class="block field"><label for="sleep"><span>Sleep last night</span><output id="sleepOut" for="sleep">7 h</output></label><input type="range" id="sleep" min="0" max="12" step="0.5" value="7"></div>
+        <fieldset class="block"><legend>On your mind </legend><div class="chips" id="tags"></div></fieldset>
+        <div class="block field"><label for="note"><span>Private note</span><span class="count" id="noteCount">0/400</span></label><textarea id="note" maxlength="400" rows="3" placeholder="Private note..."></textarea></div>
+        <div class="row"><button class="btn btn-primary" type="submit" id="saveBtn">Light today's star</button><span id="saveMsg" class="fine" role="status"></span></div>
+      </form>
+      <div class="col">
+        <div class="card tonight" id="tonight"></div>
+        <div class="card" id="questMini"></div>
+        <div class="card quick"><h3>Need something now?</h3><div class="quick-grid">
+          <a class="tile" href="#lanterns"><b>Release a lantern</b><span>Say it without a name</span></a>
+          <button class="tile" type="button" data-act="breathe"><b>Breathe for one minute</b><span>Slow, soft, guided</span></button>
+          <a class="tile" href="#ze"><b>Talk to Ze</b><span>A gentle AI companion</span></a>
+          <a class="tile" href="#library"><b>Read a quick guide</b><span>Exams, sleep, people</span></a>
+        </div></div>
+      </div>
+    </div>
+    <div id="after" class="after"></div>
+  </section>
+
+  <!-- SKY JOURNAL -->
+  <section class="view" data-view="sky" id="v-sky" hidden>
+    <div class="head"><p class="eyebrow">Your sky journal</p><h1 tabindex="-1">Your constellation</h1></div>
+    
+    <div class="stats" id="stats"></div>
+    <div class="card"><h2>The last few weeks</h2><div class="legend"><span><i class="star"></i>Mood (5 = sunny)</span><span><i class="wind"></i>Wind, your stress (5 = gale)</span></div><div class="chart" id="chart"></div></div>
+    <div class="grid2">
+      <div class="card"><h3>Five-week sky</h3><div class="cal" id="cal"></div><div class="swatches" id="swatches"></div></div>
+      <div class="card"><h3>What stands out</h3><div id="insights" class="insights"></div><div class="bars" id="tagBars"></div></div>
+    </div>
+    <div class="card row-card"><div><h3>Your data</h3></div><div class="row"><button class="btn btn-sm" id="exportBtn" type="button">Download my data</button><button class="btn btn-sm btn-ghost" id="wipeBtn" type="button">Erase my data</button></div></div>
+  </section>
+
+  <!-- LANTERNS -->
+  <section class="view" data-view="lanterns" id="v-lanterns" hidden>
+    <div class="head"><p class="eyebrow">Anonymous · 匿名</p><h1 tabindex="-1">The lantern sky</h1></div>
+    
+    <form class="card" id="composer" autocomplete="off">
+      <div class="block field"><label for="wallText"><span>What would you like to release?</span><span class="count" id="wallCount">0/400</span></label>
+        <textarea id="wallText" maxlength="400" rows="4" placeholder="Write what is on your mind (no names or student IDs)..."></textarea></div>
+      <fieldset class="block"><legend>Colour it</legend><div class="chips" id="wallTags"></div></fieldset>
+      <div class="row"><button class="btn btn-primary" id="postBtn" type="submit">Release lantern</button><span class="fine" id="wallMsg" role="status"></span></div>
+      <div id="wallCrisis" hidden></div>
+    </form>
+    
+    <div class="chips filters" id="wallFilters" aria-label="Filter lanterns"></div>
+    <div class="sea" id="sea" aria-live="polite"></div>
+  </section>
+
+  <!-- EXAMS -->
+  <section class="view" data-view="exams" id="v-exams" hidden>
+    <div class="head"><p class="eyebrow">Exam quest</p><h1 tabindex="-1">Get through exam week</h1></div>
+    <div class="panic"><p><b>Heart racing or mind blank?</b></p><button class="btn btn-primary" id="panicBtn" type="button">Start the 1-minute reset</button></div>
+    <div class="grid2">
+      <div class="card" id="questCard"><h2>Today's quests</h2><div id="questBody"></div></div>
+      <div class="card" id="examCard"><h2>My exams</h2>
+        <div id="examList"></div>
+        <form class="exam-form" id="examForm" autocomplete="off">
+          <div class="field"><label for="examName">Course or exam</label><input type="text" id="examName" maxlength="60" placeholder="e.g. Calculus midterm"></div>
+          <div class="field"><label for="examAt">Date and time</label><input type="datetime-local" id="examAt"></div>
+          <button class="btn btn-primary" type="submit">Add exam</button></form>
+        <p class="fine" id="examMsg" role="status"></p></div>
+      <div class="card"><h2>Focus timer</h2>
+        <div class="timer" id="tDisplay" role="timer" aria-live="off">25:00</div>
+        <div class="row center"><button class="btn btn-primary" id="tStart" type="button">Start</button><button class="btn" id="tReset" type="button">Reset</button></div>
+        <p class="fine center-text" id="tInfo"></p></div>
+      <div class="card"><h2>Ground yourself</h2>
+        <ul class="steps" id="ground"></ul><div class="row"><button class="btn btn-sm btn-ghost" id="groundReset" type="button">Reset</button></div></div>
+      <div class="card"><h2>Exam-day checklist</h2>
+        <ul class="steps" id="checklist"></ul><div class="row"><button class="btn btn-sm btn-ghost" id="checkReset" type="button">Reset</button></div></div>
+      
+    </div>
+  </section>
+
+  <!-- ZE -->
+  <section class="view" data-view="ze" id="v-ze" hidden>
+    <div class="head"><p class="eyebrow">AI companion</p><h1 tabindex="-1">Talk to Ze</h1></div>
+    
+    <div class="card chatbox">
+      <div class="log" id="log" aria-live="polite"></div>
+      <div class="chips" id="starters"></div>
+      <div id="chatCrisis" hidden></div>
+      <form class="chat-form" id="chatForm" autocomplete="off">
+        <label class="sr" for="chatInput">Message to Ze</label>
+        <textarea id="chatInput" rows="2" maxlength="1200" placeholder="Message Ze..."></textarea>
+        <button class="btn btn-primary" id="sendBtn" type="submit">Send</button>
+      </form>
+      <div class="row spread"><label class="check"><input type="checkbox" id="shareCheckin"> Share today's check-in with Ze</label><button class="btn btn-sm btn-ghost" id="newChat" type="button">New conversation</button></div>
+    </div>
+    <details class="card settings" id="aiSettings"><summary>Connect a real AI (optional)</summary>
+      
+      <div class="settings-grid">
+        <div class="field"><label for="aiProvider">Provider</label><select id="aiProvider"><option value="demo">Demo replies (no key)</option><option value="openai">OpenAI (ChatGPT)</option><option value="xai">xAI (Grok)</option><option value="custom">Other OpenAI-compatible</option></select></div>
+        <div class="field"><label for="aiModel">Model</label><input type="text" id="aiModel" placeholder="e.g. gpt-4o-mini"></div>
+        <div class="field wide"><label for="aiBase">API base URL</label><input type="text" id="aiBase" placeholder="https://api.openai.com/v1"></div>
+        <div class="field wide"><label for="aiKey">API key</label><input type="password" id="aiKey" autocomplete="off" placeholder="sk-..."></div>
+      </div>
+      <div class="row"><button class="btn btn-sm btn-primary" id="aiSave" type="button">Save</button><button class="btn btn-sm btn-ghost" id="aiClear" type="button">Remove key</button><span class="fine" id="aiMsg" role="status"></span></div>
+    </details>
+    
+  </section>
+
+  <!-- LIBRARY -->
+  <section class="view" data-view="library" id="v-library" hidden>
+    <div class="head"><p class="eyebrow">Library</p><h1 tabindex="-1">Quick guides</h1></div>
+    <div class="card crisis-card"><h2>Reach a person now</h2><ul class="lines" id="hotlines"></ul>
+      <div class="row"><a class="btn btn-sm" href="https://www.yzu.edu.tw/admin/st/" target="_blank" rel="noopener">YZU Student Affairs (諮就組)</a></div></div>
+    <div class="row filters-row"><div class="field grow"><label class="sr" for="libSearch">Search guides</label><input type="text" id="libSearch" placeholder="Search: sleep, exam, group, lonely…"></div></div>
+    <div class="chips" id="libTopics"></div>
+    <div class="guides" id="guideGrid"></div>
+  </section>
+
+  <!-- PULSE -->
+  <section class="view" data-view="pulse" id="v-pulse" hidden>
+    <div class="head"><p class="eyebrow">For counsellors and student affairs</p><h1 tabindex="-1">Campus pulse</h1></div>
+    
+    <div class="stats" id="pulseStats"></div>
+    <div class="card"><h2>Mood and stress by week</h2><div class="legend"><span><i class="star"></i>Average mood</span><span><i class="wind"></i>Average stress</span><span><i class="band"></i>Exam weeks</span></div><div class="chart" id="pulseChart"></div></div>
+    <div class="grid2">
+      <div class="card"><h3>What students say weighs on them</h3><div class="bars" id="pulseBars"></div></div>
+      <div class="card"><h3>By college</h3><div class="tablewrap"><table id="pulseTable"></table></div></div>
+    </div>
+    <div class="card"><h3>What a counsellor could do with this</h3><ul class="tips" id="pulseActs"></ul></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="view" data-view="about" id="v-about" hidden>
+    <div class="head"><p class="eyebrow">About the project</p><h1 tabindex="-1">Why Heart Lantern</h1></div>
+    <div class="sdgs" id="sdgs"></div>
+    <div class="card"><h2>Prototype progress</h2><p class="sub" id="progLine"></p><div class="mods" id="mods"></div></div>
+    <div class="card"><h2>Page plan</h2><div class="plan" id="plan"></div></div>
+    <div class="grid2">
+      <div class="card"><h3>Next milestones</h3><ol class="roadmap" id="roadmap"></ol></div>
+      <div class="card"><h3>Safety and privacy by design</h3><ul class="tips" id="safety"></ul></div>
+    </div>
+  </section>
+</main>
+
+
+
+<dialog id="lanternDlg" aria-labelledby="ldTitle"><div class="dlg" id="lanternBody"></div></dialog>
+<dialog id="guideDlg" aria-labelledby="gdTitle"><div class="dlg" id="guideBody"></div></dialog>
+<dialog id="breathDlg" aria-labelledby="bdTitle"><div class="dlg center-text">
+  <h2 id="bdTitle">Breathe with the lantern</h2>
+  <div class="chips center" id="patterns"></div>
+  <div class="breath"><div class="orb" id="orb"></div><div class="breath-text"><strong id="bLabel">Ready</strong><span id="bCount"></span></div></div>
+  <p class="fine" id="bCycles"></p>
+  <div class="row center"><button class="btn btn-primary" id="bStart" type="button">Start</button><button class="btn" id="bClose" type="button">Close</button></div>
+  <ul class="steps" id="bGround" hidden></ul>
+</div></dialog>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/sky.js"></script>
+<script src="js/story.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

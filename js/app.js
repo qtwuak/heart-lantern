@@ -157,7 +157,7 @@
     if (!skyView || $("#syncCard")) return;
     var card = h("div", { id: "syncCard", class: "card" },
       h("h2", { text: "Cross-device sync code" }),
-      h("p", { class: "sub", text: "Use this code to sync across devices." })
+      h("p", { class: "sub", text: "Your sleep logs, check-ins, and Ze chat history are saved to the server under this code. Enter the same code on your phone or another PC to load your history." })
     );
     var inp = h("input", { type: "text", value: SYNC_KEY, "aria-label": "Sync code", style: "max-width:260px;font-family:monospace" });
     var status = h("span", { class: "fine", text: "Synced" });
@@ -227,12 +227,12 @@
         ul.appendChild(h("li", {}, b));
       });
       box.appendChild(ul);
-      
+      box.appendChild(h("p", { class: "fine", style: "margin-top:12px", text: "Quests reset every day. Fuel is kept forever." }));
     }
     if (mini) {
       mini.textContent = "";
       mini.appendChild(h("h3", { text: "Today's quests" }));
-      mini.appendChild(h("p", { class: "sub", text: done.length + " / " + QUESTS.length + " done" }));
+      mini.appendChild(h("p", { class: "sub", text: done.length + " of " + QUESTS.length + " done. Small things count." }));
       mini.appendChild(fuelBlock());
       mini.appendChild(h("div", { class: "row" }, h("a", { class: "btn btn-sm", href: "#exams", text: "Open quests" })));
     }
@@ -262,6 +262,7 @@
     var d = new Date(), hr = d.getHours(), p = moonPhase(d);
     $("#dateLine").textContent = d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
     $("#hello").textContent = hr < 5 ? "Still up? The sky is with you." : hr < 12 ? "Good morning." : hr < 18 ? "Good afternoon." : "Good evening.";
+    $("#moonLine").textContent = "Tonight there is " + moonName(p) + ". However today went, you can put it down here for a minute.";
     drawMoon($("#moon"), p);
   }
   function buildForm() {
@@ -345,7 +346,8 @@
     return out;
   }
   function renderSky() {
-    var real = entries(), demo = real.length < 3, data = demo ? demoList() : real;
+    var real = entries(), demo = real.length < 3, data = demo ? demoList() : real, note = $("#demoNote");
+    note.hidden = !demo; note.textContent = demo ? "Example sky, so you can see what this will look like. Your own stars replace it once you have three check-ins." : "";
     var map = {}; data.forEach(function (x) { map[x.date] = x; });
     var days = []; for (var i = 29; i >= 0; i--) { var dt = addDays(new Date(), -i); days.push({ d: dt, e: map[ymd(dt)] || null }); }
     var last14 = days.slice(-14).filter(function (x) { return x.e; }).map(function (x) { return x.e; });
@@ -452,167 +454,38 @@
     if (!list.length) { sea.appendChild(h("div", { class: "empty" }, h("b", { text: "No lanterns here yet" }), "Be the first to release one.")); return; }
     list.forEach(function (x, i) { sea.appendChild(lanternEl(x, i)); });
   }
-  var SAFETY_BLOCK = /\b([sS]?1[0-4]\d{5,6}|09\d{2}[-\s]?\d{3}[-\s]?\d{3})\b|(fuck|bitch|slut|whore|kys|幹你娘|靠北|去死|白痴|智障)/i;
-  var transCache = {};
-
-  function translateText(text, cb) {
-    if (transCache[text]) return cb(transCache[text]);
-    var hasChinese = /[\u4e00-\u9fa5]/.test(text);
-    var pair = hasChinese ? "zh-TW|en" : "en|zh-TW";
-    fetch("https://api.mymemory.translated.net/get?q=" + encodeURIComponent(text) + "&langpair=" + pair)
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        var out = (d && d.responseData && d.responseData.translatedText) ? d.responseData.translatedText : text;
-        transCache[text] = out;
-        cb(out);
-      })
-      .catch(function () {
-        cb(hasChinese ? "[Translation unavailable offline]" : "[無法連線翻譯]");
-      });
-  }
-
   function openLantern(id) {
     var x = allLanterns().filter(function (y) { return y.id === id; })[0]; if (!x) return;
     var lit = S.lit.indexOf(id) >= 0, count = (x.light || 0) + (lit ? 1 : 0), body = $("#lanternBody"), cls = TAGCLS[x.tag] || "glow"; body.textContent = "";
-    var isZh = /[\u4e00-\u9fa5]/.test(x.text);
-    var showingTranslated = false;
-
-    var meta = h("div", { class: "meta", style: "--lc:var(--" + cls + ")" },
-      h("span", { class: "tag", text: x.tag }),
-      h("span", { text: (x.handle || "You") + " · " + ago(x.ts) })
-    );
-    var tBtn = h("button", {
-      type: "button",
-      class: "btn btn-sm btn-ghost",
-      style: "margin-left:auto;padding:4px 10px;font-size:12px;",
-      text: isZh ? "中 → EN" : "EN → 繁中"
-    });
-    meta.appendChild(tBtn);
-    body.appendChild(meta);
-
+    body.appendChild(h("div", { class: "meta", style: "--lc:var(--" + cls + ")" }, h("span", { class: "tag", text: x.tag }), h("span", { text: (x.handle || "You") + " · " + ago(x.ts) })));
     body.appendChild(h("h2", { id: "ldTitle", class: "sr", text: "Lantern" }));
-    var pText = h("p", { class: "lantern-big", text: x.text });
-    body.appendChild(pText);
-
-    tBtn.addEventListener("click", function () {
-      if (showingTranslated) {
-        pText.textContent = x.text;
-        tBtn.textContent = isZh ? "中 → EN" : "EN → 繁中";
-        showingTranslated = false;
-      } else {
-        tBtn.textContent = "Translating...";
-        translateText(x.text, function (translated) {
-          pText.textContent = translated;
-          tBtn.textContent = "Show Original";
-          showingTranslated = true;
-        });
-      }
-    });
-
+    body.appendChild(h("p", { class: "lantern-big", text: x.text }));
     var row = h("div", { class: "row" });
     var lb = h("button", { type: "button", class: "btn " + (lit ? "lit-on" : ""), "aria-pressed": String(lit), text: (lit ? "Lit with a hug" : "Light it with a hug") + (count ? " · " + count : "") });
-    lb.addEventListener("click", function () {
-      var i = S.lit.indexOf(id);
-      if (i >= 0) S.lit.splice(i, 1);
-      else {
-        S.lit.push(id);
-        award("lantern");
-        apiFetch("/api/lanterns/" + encodeURIComponent(id) + "/light", { method: "POST" }).catch(function () {});
-      }
-      store.set("lit", S.lit);
-      renderSea();
-      openLantern(id);
-    });
+    lb.addEventListener("click", function () { var i = S.lit.indexOf(id); if (i >= 0) S.lit.splice(i, 1); else { S.lit.push(id); award("lantern"); apiFetch("/api/lanterns/" + encodeURIComponent(id) + "/light", { method: "POST" }).catch(function () {}); } store.set("lit", S.lit); renderSea(); openLantern(id); });
     row.appendChild(lb);
-
-    if (x.mine) {
-      row.appendChild(h("button", {
-        type: "button",
-        class: "btn btn-ghost",
-        text: "Delete",
-        onclick: function () {
-          S.mine = S.mine.filter(function (m) { return m.id !== id; });
-          store.set("mine", S.mine);
-          $("#lanternDlg").close();
-          renderSea();
-          toast("Lantern removed");
-        }
-      }));
-    } else {
-      row.appendChild(h("button", {
-        type: "button",
-        class: "btn btn-ghost",
-        text: "Report / Block",
-        onclick: function () {
-          S.hidden.push(id);
-          store.set("hidden", S.hidden);
-          apiFetch("/api/lanterns/" + encodeURIComponent(id) + "/report", { method: "POST" }).catch(function () {});
-          $("#lanternDlg").close();
-          renderSea();
-          toast("Hidden and reported");
-        }
-      }));
-    }
-
-    row.appendChild(h("button", {
-      type: "button",
-      class: "btn btn-ghost",
-      style: "color:#ff8f70;",
-      text: "Admin Delete",
-      onclick: function () {
-        var secret = store.get("adminSecret", "") || prompt("Enter developer admin password:");
-        if (!secret) return;
-        fetch("/api/admin/lanterns/" + encodeURIComponent(id), {
-          method: "DELETE",
-          headers: { "X-Admin-Secret": secret }
-        }).then(function (r) {
-          if (!r.ok) {
-            store.set("adminSecret", "");
-            toast("Wrong admin password");
-            return;
-          }
-          store.set("adminSecret", secret);
-          serverLanterns = serverLanterns.filter(function (s) { return s.id !== id; });
-          S.hidden.push(id);
-          store.set("hidden", S.hidden);
-          $("#lanternDlg").close();
-          renderSea();
-          toast("Deleted from server");
-        }).catch(function () {
-          toast("Server unreachable");
-        });
-      }
-    }));
-
+    if (x.mine) row.appendChild(h("button", { type: "button", class: "btn btn-ghost", text: "Delete my lantern", onclick: function () { S.mine = S.mine.filter(function (m) { return m.id !== id; }); store.set("mine", S.mine); $("#lanternDlg").close(); renderSea(); toast("Lantern removed"); } }));
+    else row.appendChild(h("button", { type: "button", class: "btn btn-ghost", text: "Report", onclick: function () { S.hidden.push(id); store.set("hidden", S.hidden); $("#lanternDlg").close(); renderSea(); toast("Thanks, we hid it for you"); } }));
     row.appendChild(h("button", { type: "button", class: "btn btn-ghost", text: "Close", onclick: function () { $("#lanternDlg").close(); } }));
     body.appendChild(row);
     var d = $("#lanternDlg"); if (!d.open) d.showModal();
   }
-
   function buildWall() {
     var tw = $("#wallTags");
     Object.keys(TAGCLS).forEach(function (t) { tw.appendChild(h("button", { type: "button", class: "chip", "data-t": t, "aria-pressed": String(t === S.wallTag), text: t, onclick: function () { S.wallTag = t; paintWallTags(); } })); });
-    $("#wallText").addEventListener("input", function (e) { $("#wallCount").textContent = e.target.value.length + "/400"; $("#wallCrisis").hidden = true; $("#wallMsg").textContent = ""; });
+    $("#wallText").addEventListener("input", function (e) { $("#wallCount").textContent = e.target.value.length + "/400"; $("#wallCrisis").hidden = true; });
     $("#composer").addEventListener("submit", function (e) { e.preventDefault(); submitPost(false); });
   }
-
   function paintWallTags() { $$("#wallTags .chip").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.t === S.wallTag)); }); }
-
   function submitPost(force) {
     var ta = $("#wallText"), msg = $("#wallMsg"), text = ta.value.trim();
     if (text.length < 3) { msg.textContent = "Write a little more first."; return; }
-    if (SAFETY_BLOCK.test(text)) {
-      msg.textContent = "Please remove student IDs, phone numbers, or offensive words.";
-      return;
-    }
     if (!force && CRISIS.test(text)) {
       var box = $("#wallCrisis"); box.textContent = "";
-      box.appendChild(crisisCard(h("div", { class: "row" }, h("a", { class: "btn btn-primary", href: "#ze", text: "Talk to Ze now" }), h("button", { type: "button", class: "btn", text: "Release anyway", onclick: function () { submitPost(true); } })))); box.hidden = false; return;
+      box.appendChild(crisisCard(h("div", { class: "row" }, h("a", { class: "btn btn-primary", href: "#ze", text: "Talk to Ze now" }), h("button", { type: "button", class: "btn", text: "Release it anyway", onclick: function () { submitPost(true); } })))); box.hidden = false; return;
     }
     var id = "m" + Date.now().toString(36), o = { id: id, tag: S.wallTag, text: text.slice(0, 400), ts: Date.now(), light: 0, handle: pick(ADJ) + " " + pick(NOUN) };
-    S.mine.unshift(o); store.set("mine", S.mine);
-    apiFetch("/api/lanterns", { method: "POST", body: JSON.stringify(o) }).catch(function () {});
-    ta.value = ""; $("#wallCount").textContent = "0/400"; $("#wallCrisis").hidden = true; msg.textContent = "";
+    S.mine.unshift(o); store.set("mine", S.mine); apiFetch("/api/lanterns", { method: "POST", body: JSON.stringify(o) }).catch(function () {}); ta.value = ""; $("#wallCount").textContent = "0/400"; $("#wallCrisis").hidden = true; msg.textContent = "";
     var l = h("div", { class: "lantern " + (TAGCLS[o.tag] || "glow") + " launch" }, h("span", { class: "cap t" }), h("span", { class: "paper" }, h("span", { class: "snip", text: o.text })), h("span", { class: "cap b" }), h("span", { class: "tassel" }));
     document.body.appendChild(l); setTimeout(function () { l.remove(); }, 3100);
     toast("Your lantern is rising"); award("lantern"); setTimeout(renderSea, 350);
@@ -754,7 +627,10 @@
     return out;
   }
   function logAdd(role, text) { var log = $("#log"), b = h("div", { class: "bubble " + role }, h("small", { text: role === "me" ? "You" : role === "ze" ? "Ze" : "Notice" }), document.createTextNode(text)); log.appendChild(b); log.scrollTop = log.scrollHeight; return b; }
-  function zeMode() {}
+  function zeMode() {
+    var b = $("#zeMode"), p = S.ai.provider;
+    b.textContent = p === "demo" || !S.ai.key ? "Demo mode: Ze answers with pre-written, caring replies and is not a live AI. Open “Connect a real AI” below to use ChatGPT or Grok with your own key." : "Connected to " + (p === "xai" ? "xAI (Grok)" : p === "openai" ? "OpenAI" : "a custom API") + " using your key.";
+  }
   function chatReset(skipServer) { S.chat = []; $("#log").textContent = ""; $("#chatCrisis").hidden = true; $("#starters").hidden = false; logAdd("ze", "Hi, I'm Ze. How are you doing today? Chinese or English is fine, and you can start anywhere."); if (!skipServer) pushChatToServer(true); }
   async function sendChat(text) {
     text = (text || "").trim(); if (S.busy || !text) return; $("#starters").hidden = true;
@@ -807,7 +683,7 @@
     var g = D.guides.filter(function (x) { return x.id === id; })[0], gp = guideProgress(), body = $("#guideBody"); body.textContent = "";
     body.appendChild(h("span", { class: "tag", style: "--lc:var(--mint);width:fit-content", text: g.topic }));
     body.appendChild(h("h2", { id: "gdTitle", text: g.title }));
-    body.appendChild(h("p", { class: "sub", text: g.min + " min" }));
+    body.appendChild(h("p", { class: "sub", text: "About " + g.min + " minutes. Tap each step when you have done it." }));
     var ul = h("ul", { class: "steps" });
     g.steps.forEach(function (s, i) { var on = !!(gp[g.id] && gp[g.id][i]), b = h("button", { type: "button", "aria-pressed": String(on), text: s }); b.addEventListener("click", function () { gp[g.id] = gp[g.id] || {}; gp[g.id][i] = !gp[g.id][i]; store.set("gp", gp); b.setAttribute("aria-pressed", String(!!gp[g.id][i])); renderLibrary(); }); ul.appendChild(h("li", {}, b)); });
     body.appendChild(ul); body.appendChild(h("p", { class: "fine", text: g.note }));
@@ -838,7 +714,7 @@
     var tb = $("#pulseTable"); tb.textContent = ""; tb.appendChild(h("tr", {}, h("th", { text: "College" }), h("th", { text: "Students" }), h("th", { text: "Mood" }), h("th", { text: "Stress" })));
     P.groups.forEach(function (g) { var hid = g.n < 10; tb.appendChild(h("tr", {}, h("td", { text: g.name }), h("td", { text: String(g.n) }), hid ? h("td", { class: "muted", colspan: "2", text: "Hidden: fewer than 10 students" }) : h("td", { text: f1(g.mood) }), hid ? null : h("td", { text: f1(g.stress) }))); });
     var acts = $("#pulseActs"); acts.textContent = "";
-    ["Peak stress in W5 & W10 (exam weeks).", "Sleep is a top-3 stressor.", "Groups under 10 are hidden for anonymity."].forEach(function (t) { acts.appendChild(h("li", { text: t })); });
+    ["Stress climbs in weeks 5 and 10, the exam weeks. Counsellors could open pop-up sessions the week before.", "“Sleep” is the third most mentioned topic. A short campus campaign on sleep before exams could reach many students at once.", "Because small groups are hidden and no names are stored, staff can plan support without ever identifying a student."].forEach(function (t) { acts.appendChild(h("li", { text: t })); });
   }
 
   /* ---------- about ---------- */
@@ -846,7 +722,7 @@
     var s = $("#sdgs"); s.textContent = "";
     D.sdgs.forEach(function (g) { s.appendChild(h("div", { class: "sdg", style: "background:" + g.color + ";color:" + g.ink }, h("div", { class: "n", text: "SDG " + g.n }), h("h3", { text: g.name }), h("p", { text: g.target }), h("p", { text: g.how }))); });
     var mods = [["Daily check-in and inner weather", 1], ["Sky journal and constellation", 1], ["Anonymous lantern wall", 1], ["Exam quest, timer and breathing", 1], ["Ze companion (demo and optional AI)", 1], ["Quick-guide library and hotlines", 1], ["Campus pulse dashboard (sample data)", 1], ["Shared database and student accounts", 0], ["Admin moderation page", 0]];
-    var done = mods.filter(function (m) { return m[1]; }).length; $("#progLine").textContent = done + " / " + mods.length + " modules live (" + Math.round(done / mods.length * 100) + "%)";
+    var done = mods.filter(function (m) { return m[1]; }).length; $("#progLine").textContent = done + " of " + mods.length + " planned modules work in this prototype (" + Math.round(done / mods.length * 100) + "%). The last two need a server.";
     var m = $("#mods"); m.textContent = ""; mods.forEach(function (x) { m.appendChild(h("div", { class: "mod" + (x[1] ? "" : " todo") }, h("i"), document.createTextNode(x[0]), h("small", { text: x[1] ? "working" : "next" }))); });
     var plan = [["Today", ["Greeting + moon phase", "Inner weather check-in form", "Tonight's thought, quests, quick actions"]], ["Sky journal", ["Stats tiles", "Constellation chart", "Five-week sky + insights"]], ["Lanterns", ["Write and release a lantern", "Lantern sky with filters", "Open, light with a hug, report"]], ["Exam quest", ["Daily quests and levels", "Exam countdowns + plan", "Timer, breathing, grounding"]], ["Talk to Ze", ["Chat window", "Crisis card on risk words", "Optional AI key settings"]], ["Library", ["Hotlines", "Search and topics", "Step-by-step guides"]], ["Campus pulse", ["Weekly mood and stress chart", "Topics and colleges", "Privacy rule: hide groups under 10"]], ["About", ["SDG mapping", "Progress and page plan", "Roadmap and safety"]]];
     var p = $("#plan"); p.textContent = ""; plan.forEach(function (x) { var w = h("div", { class: "wire" }, h("b", { text: x[0] })); x[1].forEach(function (t) { w.appendChild(h("div", { class: "blk", text: t })); }); p.appendChild(w); });

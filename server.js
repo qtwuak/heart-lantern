@@ -126,13 +126,11 @@ app.post("/api/chat", (req, res) => {
   res.json({ ok: true, count: user.chat.length });
 });
 
-// Get shared community lanterns (excluding hidden ones)
 app.get("/api/lanterns", (req, res) => {
   const visible = db.lanterns.filter((l) => !l.hidden).slice(0, 100);
   res.json({ lanterns: visible });
 });
 
-// Create new lantern with privacy/safety validation
 app.post("/api/lanterns", (req, res) => {
   const { id, tag, text, handle } = req.body || {};
   const cleanText = String(text || "").trim();
@@ -158,7 +156,6 @@ app.post("/api/lanterns", (req, res) => {
   res.json({ ok: true, lantern });
 });
 
-// Light a lantern with a hug
 app.post("/api/lanterns/:id/light", (req, res) => {
   const item = db.lanterns.find((l) => l.id === req.params.id);
   if (item) {
@@ -168,7 +165,6 @@ app.post("/api/lanterns/:id/light", (req, res) => {
   res.json({ ok: true, light: item ? item.light : 1 });
 });
 
-// Report inappropriate lantern (auto-hides after 3 reports)
 app.post("/api/lanterns/:id/report", (req, res) => {
   const item = db.lanterns.find((l) => l.id === req.params.id);
   if (item) {
@@ -181,7 +177,6 @@ app.post("/api/lanterns/:id/report", (req, res) => {
   res.json({ ok: true });
 });
 
-// Developer / Admin permanent delete endpoint
 app.delete("/api/admin/lanterns/:id", (req, res) => {
   const secret = req.headers["x-admin-secret"];
   if (secret !== ADMIN_SECRET) {
